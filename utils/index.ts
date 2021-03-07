@@ -1,6 +1,7 @@
 import * as Contacts from "expo-contacts";
 import { Contact } from "../components/ContactList";
 import uniqBy from "lodash.uniqby";
+import { Alert, Platform, ToastAndroid } from "react-native";
 
 export const getContacts = async ({ pageOffset = 0, pageSize = 50 }) => {
   return await Contacts.getContactsAsync({
@@ -31,4 +32,11 @@ export const formatContacts = (data: Array<Contacts.Contact>) => {
   }, [] as Contact[]);
 
   return uniqBy(results.flat(), "number");
+};
+
+export const Toast = (message: string) => {
+  if (Platform.OS === "android") {
+    return ToastAndroid.show(message, ToastAndroid.SHORT);
+  }
+  return Alert.alert(message);
 };
