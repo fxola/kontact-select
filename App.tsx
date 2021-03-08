@@ -1,41 +1,23 @@
 import React, { useCallback, useState } from "react";
-import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-//components
-import ContactList from "./components/ContactList";
-import CustomModal from "./components/Modal";
+import Images from "./screens/Images";
+import Contacts from "./screens/Contacts";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const App = () => {
-  const [phone, setPhone] = useState("");
-  const [visible, setIsvisible] = useState(false);
+  const [screen, setScreen] = useState(true);
 
-  const toggleModal = useCallback(() => {
-    setIsvisible(!visible);
-  }, [visible]);
+  const toggleScreen = useCallback(() => {
+    setScreen(!screen);
+  }, [screen]);
 
   return (
     <View style={styles.container}>
-      <TextInput
-        defaultValue={phone}
-        editable={!!phone}
-        style={styles.inputStyle}
-        accessibilityLabel="phone input"
-      />
-      <Pressable
-        onPress={toggleModal}
-        style={({ pressed }) => [
-          { backgroundColor: pressed ? "rgba(0,0,0,0.5)" : "black" },
-          styles.buttonStyle
-        ]}
-      >
-        <Text style={styles.buttonText}>Select Contact</Text>
-      </Pressable>
-
-      {visible && (
-        <CustomModal visible={visible} toggleModal={toggleModal}>
-          <ContactList setPhone={setPhone} toggleModal={toggleModal} />
-        </CustomModal>
-      )}
+      {screen ? <Images /> : <Contacts />}
+      <TouchableOpacity onPress={toggleScreen} style={styles.switch}>
+        <Text>Change Screens</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -44,22 +26,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  inputStyle: {
-    marginBottom: 10,
-    borderWidth: 2,
-    borderColor: "black",
-    width: "70%",
-    padding: 7
-  },
-  buttonStyle: {
-    width: "70%",
-    padding: 10,
     alignItems: "center"
   },
-  buttonText: { color: "white" }
+  switch: {
+    padding: 3,
+    borderColor: "black",
+    borderWidth: 1
+  }
 });
 
 export default App;
