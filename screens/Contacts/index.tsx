@@ -2,10 +2,10 @@ import React, { useCallback, useState } from "react";
 import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
 
 //components
-import ContactList from "../components/ContactList";
-import CustomModal from "../components/Modal";
+import ContactList from "../../components/ContactList";
+import CustomModal from "../../components/Modal";
 
-const App = () => {
+const Contacts = () => {
   const [phone, setPhone] = useState("");
   const [visible, setIsvisible] = useState(false);
 
@@ -63,4 +63,4 @@ const styles = StyleSheet.create({
   buttonText: { color: "white" }
 });
 
-export default App;
+export default Contacts;
