@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import Images from "./screens/Images";
-import Contacts from "./screens/Contacts";
+import ImageCollage from "./screens/ImageCollage";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Contacts from "./screens/Contacts";
 
 const App = () => {
   const [screen, setScreen] = useState(true);
@@ -14,7 +14,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      {screen ? <Images /> : <Contacts />}
+      {screen ? <ImageCollage /> : <Contacts />}
       <TouchableOpacity onPress={toggleScreen} style={styles.switch}>
         <Text>Change Screens</Text>
       </TouchableOpacity>

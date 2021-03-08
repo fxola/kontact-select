@@ -2,38 +2,41 @@ import React, { useCallback, useRef, useState } from "react";
 import { captureRef } from "react-native-view-shot";
 import * as MediaLibrary from "expo-media-library";
 import {
+  Text,
   View,
   StyleSheet,
+  ImageBackground,
   TouchableOpacity,
-  Text,
-  ImageBackground
+  Alert
 } from "react-native";
 
-import constant from "../constants";
-import { Toast } from "../utils";
+import constant from "../../constants";
+import { Toast } from "../../utils";
 
 //components
-import ImageWindow from "../components/ImageWindow";
+import ImageWindow from "../../components/ImageWindow";
 import {
-  AssetsSelectorComponent as Gallery,
-  ImageType
-} from "../components/AssetSelector";
+  ImageType,
+  AssetsSelectorComponent as Gallery
+} from "../../components/AssetSelector";
+import constants from "../../constants";
 
-const Page = () => {
+const ImageCollage = () => {
   const [show, setShow] = useState(false);
   const [images, setImages] = useState<ImageType[]>([]);
   const imageWindowRef = useRef<ImageBackground>();
-  const toggle = useCallback(() => {
+
+  const toggleGallery = useCallback(() => {
     setShow(!show);
   }, [show]);
 
   const onDone = (data: ImageType[]): void => {
     if (!data.length || data.length === 1) {
-      return Toast("Please Select Two Images");
+      return Alert.alert("Please Select Two Images");
     }
 
     setImages(data);
-    toggle();
+    toggleGallery();
   };
 
   const swap = () => {
@@ -49,7 +52,7 @@ const Page = () => {
     captureRef(imageWindowRef).then(onCapture);
   }, [onCapture]);
 
-  const renderImageWindow = () => {
+  const renderImageCollage = () => {
     if (images.length && images.length > 1) {
       return (
         <ImageWindow
@@ -65,21 +68,30 @@ const Page = () => {
   return (
     <View style={styles.container}>
       {show ? (
-        <Gallery onDone={onDone} goBack={toggle} />
+        <Gallery onDone={onDone} goBack={toggleGallery} />
       ) : (
         <View style={styles.container}>
-          <View style={styles.window}>{renderImageWindow()}</View>
-          <TouchableOpacity onPress={toggle} style={styles.selectButton}>
-            <Text>Select pictures</Text>
+          <View style={styles.window}>{renderImageCollage()}</View>
+          <TouchableOpacity
+            onPress={toggleGallery}
+            style={styles.selectButton}
+            testID={"select-pictures"}
+          >
+            <Text style={{ color: "white" }}>Select pictures</Text>
           </TouchableOpacity>
           {images.length ? (
             <View style={styles.buttonsWrapper}>
-              <TouchableOpacity onPress={swap} style={styles.secondaryButton}>
+              <TouchableOpacity
+                onPress={swap}
+                style={styles.secondaryButton}
+                testID={"swap-pictures"}
+              >
                 <Text>Swap pictures</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={onPressCapture}
                 style={styles.secondaryButton}
+                testID={"take-screenshot"}
               >
                 <Text>Take Screenshot</Text>
               </TouchableOpacity>
@@ -98,14 +110,17 @@ const styles = StyleSheet.create({
   },
   selectButton: {
     borderColor: "black",
-    padding: 6,
+    padding: 10,
+    backgroundColor: "black",
     borderWidth: 2,
-    marginTop: 20
+    marginTop: 20,
+    alignItems: "center",
+    width: constants.width * 0.95
   },
   buttonsWrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "70%",
+    width: "95%",
     alignItems: "center",
     alignContent: "center"
   },
@@ -115,7 +130,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     flex: 0.5,
     marginTop: 10,
-    marginLeft: 5,
+    marginHorizontal: 1,
     alignItems: "center"
   },
   imageBackground: {
@@ -131,4 +146,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Page;
+export default ImageCollage;
